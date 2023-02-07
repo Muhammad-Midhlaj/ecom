@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+   .buttons{
+   font-size: 22px;
+   margin-top: 2%;
+   margin-left: 4.2%;
+   }
+   .fa:hover{
+   color: darkcyan;
+   }
+   .btn1 {
+   background: darkcyan;
+   border: 1px solid darkcyan;
+   border-radius: 6px;
+   color: white;
+   font-size: 16px;
+   position: right;
+   margin: 10px;
+   padding: 10px;
+   margin: 0 auto;
+   letter-spacing: 1px;
+   display: inline-block;
+   }
+   .head_content {
+   margin: 0 auto;
+   padding-left: 5%;
+   }
+   .container{
+   display: flex;
+   flex-flow: column nowrap;
+   }
+   /*CSS Grid*/
+   .section-grid{
+   display: flex; 
+   padding-left: 25px;
+   padding-right: 25px;
+   }
+   .grid-prod{
+   flex: 1 1 auto;
+   display: flex; 
+   flex-flow: row wrap;  
+   }
+   .prod-grid{
+   flex: 1 1 25%;
+   margin: 2%;
+   padding: 12px;
+   align-items: center;
+   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+   display: flex;
+   flex-direction: column;
+   }
+   .prod-grid img{
+   width:100%;
+   }
+   h3, p{
+   text-align: center;
+   line-height: 1.5;
+   letter-spacing: 1px;
+   }
+   .btn{
+   background: #82b846;
+   border: 1px solid #82b846;
+   border-radius: 6px;
+   color: white;
+   font-size: 20px;
+   padding: 6px 20px;
+   position: right;
+   margin: 10px; 
+   letter-spacing: 1px;
+   display: inline-block;
+   }
+   .btn:hover{
+      background: #82b846;
+   border: 1px solid #82b846;
+   border-radius: 6px;
+   color: rgb(255, 255, 255);
+   font-size: 20px;
+   padding: 6px 20px;
+   position: right;
+   margin: 10px; 
+   letter-spacing: 1px;
+   display: inline-block;
+   }
+   button{
+   float: right;
+   }
+   /*CSS List*/
+   .section-list{
+   display: flex; 
+   padding: 2% 4%; 
+   }
+   table {
+   width: 100%;
+   margin: 10px 10px;
+   border:2px solid #000;
+   border-collapse: collapse;
+   border-spacing: 0;
+   }
+   table tr td {
+   padding: 10px;
+   border-top: 2px solid #000;
+   }
+   tr td img{
+   width:100%;
+   }
+   .btn-list{
+   background: darkcyan;
+   border: 1px solid darkcyan;
+   border-radius: 6px;
+   color: white;
+   font-size: 22px;
+   width: 200px;
+   height: 40px;
+   align-items: center;
+   margin: 10px; 
+   margin-top: 10%;
+   letter-spacing: 1px;
+   display: inline-block;
+   }
+   .btn-list:hover{
+   background: white;
+   border: 2px solid darkcyan;
+   color: darkcyan;
+   margin: 10%; 
+   }
+   /* button{
+   float: right;
+   } */
+   @media (min-width : 320px) and (max-width : 480px) { 
+   .section-list, .buttons{
+   display: none;
+   }
+   }
+</style>
+<!--Buttons of grid and list-->
+<h1>Shop - {{category.title}}</h1>
+<div class="buttons">
+</div>
+<div class="container py-5">
+   <!--Product Grid-->
+   <div id="div1">
+      <section class="section-grid">
+        {% if categories %}
+               {% for cat in categories %}
+                    <div class="grid-prod">
+                       <div class="prod-grid">
+                          {% if product.product_image %}
+                            <img src="{% url 'store:category-products' cat.slug %}}" alt="{{product.title}}">
+                            {% else %}
+                            <img src="{% static 'img/product-1.jpg' %}" alt="{{product.title}}">
+                            {% endif %}
+                            <h3 class="py-2">{{category.title}} </h3>
+                             <p class="fw-bold">₹{{product.price}} </p>
+                             <form action="{% url 'store:add-to-cart' %}">
+                              <input type="hidden" name="prod_id" value="{{product.id}}" id="product_id">
+                              <button type="submit" class="btn btn-sm btn-dark">Add to Cart</button>
+                            </form>
+                        </div>
+                    </div>
+         {% endfor %}
+        {% endif %}  
+      </section>
+   </div>
+   <!--Product List-->         
+   <div id="div2" style="display:none;">
+      <section class="section-list">
+        
+         <table>
+          {% if categories %}
+        {% for category in categories %}
+        
+            <tr>
+              {% if category.category_image %}
+               <td><img src="{{ category.category_image.url }}">
+                {% else %} 
+                <td><img src="{% static 'img/cat-img-1.jpg' %}">
+                  {% endif %}
+               <td>
+               <td>
+                  <h3>{{ category.title }} </h3>
+                  <p></p>
+                  <a  href="{% url 'store:category-products' category.slug %}">
+                  <button class="btn-list"> View <i class="fa fa-shopping-cart" aria-hidden="true"></i></button> </a>
+               </td>
+            </tr>  
+           
+          {% endfor %}
+          {% endif %}            
+         </table>
+      </section>
+   </div>
+</div>
+{% endblock content %}
